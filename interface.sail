@@ -15,6 +15,8 @@ instantiation sail_mem_read with
   'abort = Fault,
   pa_bits = pa_bits
 
+type MemReadReq('n), 'n > 0 = Mem_read_request('n, 64, bits(56), option(TranslationInfo), arm_acc_type)
+
 instantiation sail_mem_write with
   'pa = bits(56),
   'translation_summary = option(TranslationInfo),
@@ -23,7 +25,7 @@ instantiation sail_mem_write with
   pa_bits = pa_bits
 
 function rMem(addr) = {
-  let req : Mem_read_request(8, 64, bits(56), option(TranslationInfo), arm_acc_type) = struct {
+  let req : MemReadReq(8) = struct {
     access_kind = AK_explicit(struct { variety = AV_plain, strength = AS_normal }),
     va = Some(addr),
     pa = truncate(addr, 56),
